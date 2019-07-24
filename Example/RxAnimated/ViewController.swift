@@ -30,7 +30,7 @@ class ViewController: UIViewController {
     @IBOutlet var leftConstraint: NSLayoutConstraint!
     @IBOutlet var rightConstraint: NSLayoutConstraint!
     
-    private let timer = Observable<Int>.timer(0, period: 1, scheduler: MainScheduler.instance).share(replay: 1)
+    private let timer = Observable<Int>.timer(.seconds(0), period: .seconds(1), scheduler: MainScheduler.instance).share(replay: 1)
     private let bag = DisposeBag()
 
     override func viewDidLoad() {
@@ -44,14 +44,14 @@ class ViewController: UIViewController {
 
         // Animate `text` with a top flip
         timer
-            .delay(0.33, scheduler: MainScheduler.instance)
+            .delay(.milliseconds(330), scheduler: MainScheduler.instance)
             .map { "Text + flip [\($0)]" }
             .bind(animated: labelFlip.rx.animated.flip(.top, duration: 0.33).text)
             .disposed(by: bag)
 
         // Animate `text` with a custom animation `tick`, as driver
         timer
-            .delay(0.67, scheduler: MainScheduler.instance)
+            .delay(.milliseconds(670), scheduler: MainScheduler.instance)
             .map { "Text + custom [\($0)]" }
             .asDriver(onErrorJustReturn: "error")
             .bind(animated: labelCustom.rx.animated.tick(.left, duration: 0.75).text)
